@@ -47,6 +47,12 @@ export const getSoundBoards = async (req, res) => {
 
     const result = soundboards.find((sb) => sb.name === "My soundboard");
 
+    if (result && result.sounds) {
+      result.sounds = Array.from(
+        new Map(result.sounds.map((sound) => [sound.id, sound])).values()
+      );
+    }
+
     res.status(200).json({ success: true, data: result });
   } catch (error) {
     res.status(500).json({ success: false, message: error });
@@ -100,7 +106,6 @@ export const playSoundById = async (req, res) => {
     });
     res.status(200).json({ success: true, message: "Son joué avec succès" });
   } catch (error) {
-    console.log("🚀 ~ playSoundById ~ error:", error);
     res.status(500).json({ success: false, message: error });
   }
 };
